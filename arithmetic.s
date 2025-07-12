@@ -27,3 +27,43 @@
 	sub x4, x0, x5 
 
 #Note: In RISC-V, to negate a number, you can subtract it from zero.
+
+#6. Print a stored signed word
+.data
+var: .word 123456
+
+.text
+la x5, var
+lw x6, 0(x5)
+li a7, 1
+add a0, x6, x0
+ecall
+li a7, 10
+ecall
+
+#7. Print a stored signed half-word
+.data
+var: .half 32769
+
+.text
+la x5, var
+lh x6, 0(x5)
+li a7, 1
+add a0, x6, x0
+ecall
+li a7, 10
+ecall
+
+
+#8. Print the third element of the vector
+.data
+var: .word 100,1000,65536,65537,1000000,0
+
+.text
+la x5, var
+lw x6, 8(x5)
+add a0, x6, x0
+li a7, 1
+ecall
+li a7, 10
+ecall
