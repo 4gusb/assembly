@@ -48,7 +48,6 @@ var: .word 100,1000,65536,65537,1000000,0
 finvar: 
 
 .text
-.text
 la a1, var
 la a2, finvar
 sub a2, a2, a1
@@ -72,3 +71,31 @@ printVector:
         addi x5, x5, 1
         blt x5, a2, loop
     ret 
+
+
+#4. Print length of string without modifying original pointer
+.data
+string: .string "Hello World!"
+
+.text
+la a1, string
+jal PrintLen #must print number of elements
+li a7, 10 #print execution with no errors
+ecall
+nop
+
+PrintLen:
+    li a3, 0 #initiating counter
+    addi a5, a1, 0 #copy pointer to a5
+    loop:
+        lb a2, 0(a5)
+        beq a2, zero, end
+        addi a5, a5, 1
+        addi a3, a3, 1 
+        jal x0, loop
+    end: 
+        li a7, 1
+        addi a0, a3, 0
+        ecall
+        ret
+
