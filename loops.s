@@ -99,3 +99,41 @@ PrintLen:
         ecall
         ret
 
+#5. Print string in reverse
+
+.data
+string: .string "ERIPME EHT NIOJ"
+
+.text
+la a1, string
+jal reverseStr
+li a7, 10
+ecall
+nop
+
+
+reverseStr:
+    addi a6, x1, 0 #saves return address to main
+    jal StrLen #saves number of element at a3
+    li a7, 11  
+    add a4, a1, a3 #saves pointer to first element + number of elements
+    addi a4, a4, -1 #saves pointer + number of elements - 1, because otherwise will point to \0. a4 will decrement until reaching first element
+    reverseStr_loop:
+        lb a0, 0(a4) 
+        ecall
+        addi a4, a4, -1 #decrement a position
+        bge a4, a1, reverseStr_loop
+        addi x1, a6, 0 #restores the return address to main
+        ret
+     
+StrLen:
+    li a3, 0 #initiating counter
+    addi a5, a1, 0 #copy pointer to a5
+    StrLen_loop:
+        lb a2, 0(a5)
+        beq a2, zero, end
+        addi a5, a5, 1
+        addi a3, a3, 1 
+        jal x0, StrLen_loop
+    end: 
+        ret
