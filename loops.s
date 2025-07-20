@@ -137,3 +137,43 @@ StrLen:
         jal x0, StrLen_loop
     end: 
         ret
+
+
+#6. Counter number of lower letters in a string
+
+.data
+    my_string: .string "Esto es una cadena"
+
+.text
+la a0, my_string
+jal x1, count
+addi a0, a1, 0
+li a7, 1
+ecall
+li a7, 10
+ecall
+
+count:
+    mv x5, x1 #x5 = store return address to main
+    li a1, 0 #a1 = counter of lower cases
+    li a4, 123 #ASCII lower cases top
+    li a5, 96 #ASCII lower cases bottom
+    li x22, 0
+    loop:
+        lb a2, 0(a0) #a2 = current char
+        beq a2, zero, end  #ends if reaches \0
+        addi a0, a0, 1
+        blt a2, a4, verif_lower
+        jal loop
+        
+    verif_lower:
+        bgt a2, a5, add_lower
+        jal x0, loop
+        
+    add_lower:
+        addi a1, a1, 1
+        jal x0, loop
+        
+    end:
+        mv x1, x5
+        ret
